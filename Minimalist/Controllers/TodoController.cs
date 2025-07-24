@@ -30,22 +30,18 @@ public class TodoController : ControllerBase
     public IActionResult AddTodo([FromBody] CreateTodoDto todoDto)
     {
         Todo todo = _mapper.Map<Todo>(todoDto);
-        return Ok(todo);
 
-        // _context.Todos.Add(todo);
-        // _context.SaveChanges();
-        // return CreatedAtAction(nameof(GetTodoById), new { id = todo.Id }, todo);
+        _context.Todos.Add(todo);
+        _context.SaveChanges();
+        return CreatedAtAction(nameof(GetTodoById), new { id = todo.Id }, todo);
     }
 
-    /*
     [HttpGet]
     public IEnumerable<ReadTodoDto> GetTodos([FromQuery] int skip = 0, [FromQuery] int take = 5)
     {
         return _mapper.Map<List<ReadTodoDto>>(_context.Todos.Skip(skip).Take(take));
     }
-    */
 
-    /*
     [HttpGet("{id}")]
     public IActionResult GetTodoById(int id)
     {
@@ -54,5 +50,4 @@ public class TodoController : ControllerBase
         var todoDto = _mapper.Map<ReadTodoDto>(todo);
         return Ok(todoDto);
     }
-*/
 }
