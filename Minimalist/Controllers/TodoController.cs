@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Minimalist.Data;
 using Minimalist.Data.Dtos;
@@ -49,5 +50,36 @@ public class TodoController : ControllerBase
         if (todo == null) return NotFound();
         var todoDto = _mapper.Map<ReadTodoDto>(todo);
         return Ok(todoDto);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult EditTodo(int id)
+    {
+        var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
+        if (todo == null) return NotFound();
+
+        _context.Todos.Remove(todo);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    public IActionResult PatchEditTodo(int id, JsonPatchDocument<UpdateTodoDto> patch)
+    {
+        var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
+        if (todo == null) return NotFound();
+
+        var todoToBeUpdated = _mapper.Map<UpdateTodoDto>(todo);
+
+        patch.ApplyTo(todoToBeUpdated, ModelState);
+
+        if (!TryValidateModel(todoToBeUpdated))
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        _mapper.Map(todoToBeUpdated, todo);
+        _context.SaveChanges();
+        return NoContent();
     }
 }

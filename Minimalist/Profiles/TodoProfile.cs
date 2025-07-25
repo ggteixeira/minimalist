@@ -14,8 +14,8 @@ public class TodoProfile : Profile
         */
         
         CreateMap<CreateTodoDto, Todo>();
-        // CreateMap<UpdateTodoDto, Todo>();
-        // CreateMap<Todo, UpdateTodoDto>();
+        CreateMap<UpdateTodoDto, Todo>();
+        CreateMap<Todo, UpdateTodoDto>();
         CreateMap<Todo, ReadTodoDto>();
 
     }
