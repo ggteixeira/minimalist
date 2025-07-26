@@ -4,8 +4,10 @@ import { useState } from "react";
 
 type Todo = {
   id: number;
-  text: string;
+  text?: string;
   completed: boolean;
+  isCompleted?: boolean;
+  title?: string;
 };
 
 const ListOfTodos = ({
@@ -34,29 +36,29 @@ const ListOfTodos = ({
 
   return (
     <ul style={{ listStyle: "none", padding: 0 }}>
-      {todos.map((todo) => (
-        <li
-          key={todo.id}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "0.5rem",
-          }}
-        >
-          <span
-            style={{
-              textDecoration: todo.completed ? "line-through" : "none",
-              cursor: "pointer",
-            }}
-            onClick={() => toggleTodo(todo.id)}
-          >
-            {todo.text}
-          </span>
-          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-        </li>
-      ))}
+      {/* {todos.map((todo) => ( */}
+      {/*   <li */}
+      {/*     key={todo.id} */}
+      {/*     style={{ */}
+      {/*       display: "flex", */}
+      {/*       justifyContent: "space-between", */}
+      {/*       marginTop: "0.5rem", */}
+      {/*     }} */}
+      {/*   > */}
+      {/*     <span */}
+      {/*       style={{ */}
+      {/*         textDecoration: todo.completed ? "line-through" : "none", */}
+      {/*         cursor: "pointer", */}
+      {/*       }} */}
+      {/*       onClick={() => toggleTodo(todo.id)} */}
+      {/*     > */}
+      {/*       {todo.text} */}
+      {/*     </span> */}
+      {/*     <button onClick={() => deleteTodo(todo.id)}>Delete</button> */}
+      {/*   </li> */}
+      {/* ))} */}
 
-      {todoData.map((todo) => {
+      {todoData.map((todo: Todo) => {
         return (
         <li
           key={todo.id}
@@ -68,7 +70,7 @@ const ListOfTodos = ({
         >
           <span
             style={{
-              textDecoration: todo.completed ? "line-through" : "none",
+              textDecoration: todo.isCompleted ? "line-through" : "none",
               cursor: "pointer",
             }}
             onClick={() => toggleTodo(todo.id)}
