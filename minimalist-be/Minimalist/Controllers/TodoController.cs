@@ -65,7 +65,6 @@ public class TodoController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    [Authorize]
     public IActionResult PatchEditTodo(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {
         var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
@@ -81,6 +80,26 @@ public class TodoController : ControllerBase
         }
 
         _mapper.Map(todoToBeUpdated, todo);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/complete")]
+    public IActionResult ToggleCompleted(int id, JsonPatchDocument<UpdateTodoDto> patch)
+    {
+        var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
+        if (todo == null) return NotFound();
+
+        var todoToBeCompleted = _mapper.Map<UpdateTodoDto>(todo);
+
+        patch.ApplyTo(todoToBeCompleted, ModelState);
+
+        if (!TryValidateModel(todoToBeCompleted))
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        _mapper.Map(todoToBeCompleted, todo);
         _context.SaveChanges();
         return NoContent();
     }

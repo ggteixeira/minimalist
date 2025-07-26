@@ -7,4 +7,5 @@ public class UpdateTodoDto
 {
     [Required(ErrorMessage = "Todo title is required")]
     public string Title { get; set; }
+    public bool IsCompleted { get; set; }
 }

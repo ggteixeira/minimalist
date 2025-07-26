@@ -8,4 +8,6 @@ public class Todo
 
     [Required(ErrorMessage = "Todo title is required")]
     public string Title { get; set; }
+
+    public bool isCompleted { get; set; }
 }

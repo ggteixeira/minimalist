@@ -10,4 +10,6 @@ public class CreateTodoDto
 
     [Required(ErrorMessage = "Todo title is required")]
     public string Title { get; set; }
+    
+    public bool IsCompleted { get; set; }
 }
