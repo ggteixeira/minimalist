@@ -55,6 +55,30 @@ const ListOfTodos = ({
           <button onClick={() => deleteTodo(todo.id)}>Delete</button>
         </li>
       ))}
+
+      {todoData.map((todo) => {
+        return (
+        <li
+          key={todo.id}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "0.5rem",
+          }}
+        >
+          <span
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none",
+              cursor: "pointer",
+            }}
+            onClick={() => toggleTodo(todo.id)}
+          >
+            {todo.title}
+          </span>
+          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+        </li>
+        )
+      })}
     </ul>
   );
 };

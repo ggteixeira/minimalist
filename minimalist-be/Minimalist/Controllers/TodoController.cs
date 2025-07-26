@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Minimalist.Data;
@@ -64,6 +65,7 @@ public class TodoController : ControllerBase
     }
 
     [HttpPatch("{id}")]
+    [Authorize]
     public IActionResult PatchEditTodo(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {
         var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
