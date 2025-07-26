@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import "./App.css";
 import { useState } from "react";
 
@@ -16,6 +17,21 @@ const ListOfTodos = ({
   toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
 }) => {
+  const {
+    isPending,
+    error,
+    data: todoData,
+  } = useQuery({
+    queryKey: ["todosData"],
+    queryFn: async () => {
+      const response = await fetch("https://localhost:7071/todo");
+      return await response.json();
+    },
+  });
+
+  if (isPending) return <span>"Loading..."</span>;
+  if (error) return <span>"An error has occurred"</span>;
+
   return (
     <ul style={{ listStyle: "none", padding: 0 }}>
       {todos.map((todo) => (
