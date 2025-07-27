@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-type Todo = {
+type TodoInterface = {
   id: number;
   text?: string;
   completed: boolean;
@@ -14,9 +15,10 @@ const ListOfTodos = ({
   todos,
   toggleTodo,
   deleteTodo,
+  handleToggleTodo,
 }: {
   todos: Todo[];
-  toggleTodo: (id: number) => void;
+  handleToggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
 }) => {
   const {
@@ -50,7 +52,7 @@ const ListOfTodos = ({
       {/*         textDecoration: todo.completed ? "line-through" : "none", */}
       {/*         cursor: "pointer", */}
       {/*       }} */}
-      {/*       onClick={() => toggleTodo(todo.id)} */}
+      {/*       onClick={() => handleToggleTodo(todo.id)} */}
       {/*     > */}
       {/*       {todo.text} */}
       {/*     </span> */}
@@ -58,36 +60,51 @@ const ListOfTodos = ({
       {/*   </li> */}
       {/* ))} */}
 
-      {todoData.map((todo: Todo) => {
+      {todoData.map((todo: TodoInterface) => {
         return (
-        <li
-          key={todo.id}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "0.5rem",
-          }}
-        >
-          <span
+          <li
+            key={todo.id}
             style={{
-              textDecoration: todo.isCompleted ? "line-through" : "none",
-              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "0.5rem",
             }}
-            onClick={() => toggleTodo(todo.id)}
           >
-            {todo.title}
-          </span>
-          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-        </li>
-        )
+            <span
+              style={{
+                textDecoration: todo.isCompleted ? "line-through" : "none",
+                cursor: "pointer",
+              }}
+              onClick={() => handleToggleTodo(todo.id)}
+            >
+              {todo.title}
+            </span>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
+        );
       })}
     </ul>
   );
 };
 
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<TodoInterface[]>([]);
   const [newTodo, setNewTodo] = useState("");
+
+  // const mutation = useMutation({
+  //   mutationFn: (toggleTodo) => {
+  //     return fetch(`https://localhost:7071/todo/${toggleTodo.id}/complete`, {
+  //       method: "post",
+  //       mode: "cors",
+  //       body: JSON.stringify(toggleTodo),
+  //     });
+  //   },
+  // });
+
+  useEffect(() => {
+    console.log("todos (state):");
+    console.log(todos);
+  }, [todos]);
 
   const addTodo = () => {
     if (newTodo.trim() === "") return;
@@ -95,12 +112,44 @@ export default function App() {
     setNewTodo("");
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+  const toggleTodo = (id: number, isCompleted) => {
+    const response = axios.patch(`https://localhost:7071/todo/${id}/complete`, [
+      {
+        // isCompleted: isCompleted,
+        op: "replace",
+        path: "/iscompleted",
+        value: "true",
+      },
+    ]);
+
+    return response.data;
+
+    // setTodos(
+    //   todos.map((todo) =>
+    //     todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+    //   ),
+    // );
+  };
+
+  const useToggleTodo = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: ({ id, isCompleted }: TodoInterface) => {
+        toggleTodo(id, isCompleted);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["todosData"] });
+      },
+    });
+  };
+
+  const togleTodoHook = useToggleTodo();
+
+  const handleToggleTodo = () => {
+    console.log("handleToggleTodo:");
+    console.log(todos);
+    togleTodoHook.mutate({ id: 12, isCompleted: true });
   };
 
   const deleteTodo = (id: number) => {
@@ -121,8 +170,10 @@ export default function App() {
       </div>
       <ListOfTodos
         todos={todos}
-        toggleTodo={toggleTodo}
+        // toggleTodo={toggleTodo}
+        handleToggleTodo={handleToggleTodo}
         deleteTodo={deleteTodo}
+        handleToggleTodo={handleToggleTodo}
       />
     </div>
   );
