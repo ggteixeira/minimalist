@@ -75,7 +75,7 @@ const ListOfTodos = ({
                 textDecoration: todo.isCompleted ? "line-through" : "none",
                 cursor: "pointer",
               }}
-              onClick={() => handleToggleTodo(todo.id)}
+              onClick={() => handleToggleTodo(todo)}
             >
               {todo.title}
             </span>
@@ -118,7 +118,7 @@ export default function App() {
         // isCompleted: isCompleted,
         op: "replace",
         path: "/iscompleted",
-        value: "true",
+        value: isCompleted,
       },
     ]);
 
@@ -146,10 +146,10 @@ export default function App() {
 
   const togleTodoHook = useToggleTodo();
 
-  const handleToggleTodo = () => {
+  const handleToggleTodo = (todo) => {
     console.log("handleToggleTodo:");
-    console.log(todos);
-    togleTodoHook.mutate({ id: 12, isCompleted: true });
+    console.log(todo);
+    togleTodoHook.mutate({ id: todo.id, isCompleted: !todo.isCompleted });
   };
 
   const deleteTodo = (id: number) => {
@@ -171,7 +171,6 @@ export default function App() {
       <ListOfTodos
         todos={todos}
         // toggleTodo={toggleTodo}
-        handleToggleTodo={handleToggleTodo}
         deleteTodo={deleteTodo}
         handleToggleTodo={handleToggleTodo}
       />
