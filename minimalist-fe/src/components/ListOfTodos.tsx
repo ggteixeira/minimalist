@@ -1,31 +1,12 @@
 import "../App.css";
 import type { TodoInterface } from "../types/TodoInterface";
 import { useTodos } from "../hooks/useTodos";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import type { BodyInterface } from "../types/BodyInterface";
+import { useToggleTodo } from "../hooks/useToggleTodo";
 
 const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
   const { isPending, error, data: todoData } = useTodos();
 
-  const PATH = "https://localhost:7071/todo";
-
-  const queryClient = useQueryClient();
-
-  const toggleTodoMutation = useMutation({
-    mutationFn: ({
-      todo,
-      body,
-    }: {
-      todo: TodoInterface;
-      body: BodyInterface[];
-    }) => {
-      return axios.patch(`${PATH}/${todo.id}/complete`, body);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
+  const toggleTodoMutation = useToggleTodo();
 
   const handleToggleTodo = (todo: TodoInterface) => {
     const body = [
