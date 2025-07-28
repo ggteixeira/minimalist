@@ -3,4 +3,3 @@ export type BodyInterface = {
   path: string;
   value: boolean;
 };
-
