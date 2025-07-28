@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import ListOfTodos from "./components/ListOfTodos";
 
@@ -13,8 +13,6 @@ type TodoInterface = {
 export default function App() {
   const [todos, setTodos] = useState<TodoInterface[]>([]);
   const [newTodo, setNewTodo] = useState("");
-
-  useEffect(() => {}, [todos]);
 
   const addTodo = () => {
     if (newTodo.trim() === "") return;

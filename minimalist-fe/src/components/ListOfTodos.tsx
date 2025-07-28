@@ -50,6 +50,7 @@ const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
   if (isPending) return <span>Loading...</span>;
   if (error) return <span>An error has occurred</span>;
 
+
   return (
     <ul style={{ listStyle: "none", padding: 0 }}>
       {todoData.map((todo: TodoInterface) => {
