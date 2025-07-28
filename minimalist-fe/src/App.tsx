@@ -27,8 +27,12 @@ export default function App() {
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "1rem" }}>
       <h1>Todo List</h1>
-      <div style={{ display: "flex", gap: "0.5rem" }}>
+      <div style={{ display: "flex", gap: "0.5rem", borderRadius: "8px" }}>
         <input
+          style={{
+            border: "1px solid silver",
+            padding: "0.5rem",
+          }}
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
