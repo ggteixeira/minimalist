@@ -1,45 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "../App.css";
 import type { TodoInterface } from "../types/TodoInterface";
-import axios from "axios";
+import { useTodos } from "../hooks/useTodos";
+import { useToggleTodo } from "../hooks/useToggleTodo";
 
 const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
-  const {
-    isPending,
-    error,
-    data: todoData,
-  } = useQuery({
-    queryKey: ["todosData"],
-    queryFn: async () => {
-      const response = await fetch("https://localhost:7071/todo");
-      return await response.json();
-    },
-  });
-
-  const toggleTodo = (id: number, isCompleted: boolean) => {
-    const response = axios.patch(`https://localhost:7071/todo/${id}/complete`, [
-      {
-        op: "replace",
-        path: "/iscompleted",
-        value: isCompleted,
-      },
-    ]);
-
-    return response.data;
-  };
-
-  const useToggleTodo = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: ({ id, isCompleted }: TodoInterface) => {
-        toggleTodo(id, isCompleted);
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["todosData"] });
-      },
-    });
-  };
+  const { isPending, error, data: todoData } = useTodos();
 
   const togleTodoHook = useToggleTodo();
 
@@ -49,7 +14,6 @@ const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
 
   if (isPending) return <span>Loading...</span>;
   if (error) return <span>An error has occurred</span>;
-
 
   return (
     <ul style={{ listStyle: "none", padding: 0 }}>
