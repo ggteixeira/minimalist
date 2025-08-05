@@ -1,18 +1,23 @@
 import "../App.css";
 import type { TodoInterface } from "../types/TodoInterface";
-import { useTodos } from "../hooks/useTodos";
+import { useFetchTodos } from "../hooks/useFetchtodos";
 import { useToggleTodo } from "../hooks/useToggleTodo";
 import { EditOutlined } from "@mui/icons-material";
+import { useDeleteTodo } from "../hooks/useDeleteTodoById";
 
 const TodoItem = ({
   todo,
   handleToggleTodo,
-  deleteTodo,
 }: {
   todo: TodoInterface;
   handleToggleTodo: (todo: TodoInterface) => void;
-  deleteTodo: (id: number) => void;
 }) => {
+  const deleteTodoMutation = useDeleteTodo();
+
+  const handleDeleteTodo = (id: number) => {
+    deleteTodoMutation.mutate({ todoId: id });
+  };
+
   return (
     <li
       style={{
@@ -38,14 +43,14 @@ const TodoItem = ({
         <EditOutlined
           sx={{ color: "gray", "&:hover": { cursor: "pointer" } }}
         />
-        <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+        <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
       </div>
     </li>
   );
 };
 
-const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
-  const { isPending, error, data: todoData } = useTodos();
+const ListOfTodos = () => {
+  const { isPending, error, data: todoData } = useFetchTodos();
 
   const toggleTodoMutation = useToggleTodo();
 
@@ -72,7 +77,6 @@ const ListOfTodos = ({ deleteTodo }: { deleteTodo: (id: number) => void }) => {
             key={todo.id}
             todo={todo}
             handleToggleTodo={handleToggleTodo}
-            deleteTodo={deleteTodo}
           />
         );
       })}

@@ -20,10 +20,6 @@ export default function App() {
     setNewTodo("");
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
-
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "1rem" }}>
       <h1>Todo List</h1>
@@ -40,7 +36,7 @@ export default function App() {
         />
         <button onClick={addTodo}>Add</button>
       </div>
-      <ListOfTodos deleteTodo={deleteTodo} />
+      <ListOfTodos />
     </div>
   );
 }
