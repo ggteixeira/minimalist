@@ -1,23 +1,15 @@
 import { useState } from "react";
 import "./App.css";
 import ListOfTodos from "./components/ListOfTodos";
-
-type TodoInterface = {
-  id: number;
-  text?: string;
-  completed: boolean;
-  isCompleted?: boolean;
-  title?: string;
-};
+import { useAddTodo } from "./hooks/useAddtodo";
 
 export default function App() {
-  const [todos, setTodos] = useState<TodoInterface[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
-  const addTodo = () => {
-    if (newTodo.trim() === "") return;
-    setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
-    setNewTodo("");
+  const addTodoMutation = useAddTodo();
+
+  const handleAddTodo = () => {
+    addTodoMutation.mutate({ body: newTodo });
   };
 
   return (
@@ -34,7 +26,7 @@ export default function App() {
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add new task"
         />
-        <button onClick={addTodo}>Add</button>
+        <button onClick={handleAddTodo}>Add</button>
       </div>
       <ListOfTodos />
     </div>
