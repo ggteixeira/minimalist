@@ -32,7 +32,7 @@ const TodoItem = ({
       <span
         style={{
           textDecoration: todo.isCompleted ? "line-through" : "none",
-          color: todo.isCompleted ? "gray" : "black",
+          color: todo.isCompleted ? "gray" : "inherit",
           cursor: "pointer",
         }}
         onClick={() => handleToggleTodo(todo)}
