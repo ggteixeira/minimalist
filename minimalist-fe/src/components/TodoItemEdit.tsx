@@ -1,29 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../App.css";
 import { useEditTodo } from "../hooks/useEditTodo";
+import { CancelOutlined } from "@mui/icons-material";
+import type { TodoInterface } from "../types/TodoInterface";
 
 export const TodoItemEdit = ({
   setIsEditingTodo,
   editedTodo,
-  setEditedTodo,
+  handleCancelEditTodo,
+}: {
+  setIsEditingTodo: (_: boolean) => boolean;
+  editedTodo: TodoInterface;
+  handleCancelEditTodo: () => void;
 }) => {
   const [userInput, setUserInput] = useState(editedTodo.title);
 
-  useEffect(() => {
-    // console.log(editedTodo);
-  }, [editedTodo]);
-
   const editTodoMutation = useEditTodo();
 
-  const handleChange = ({ target: { value } }) => {
-    // console.log(value);
+  const handleChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(value);
   };
 
   const handleSaveTodo = () => {
     setIsEditingTodo(false);
-    // // console.log("editedTodo.id:");
-    // console.log(editedTodo.id);
     editTodoMutation.mutate({ todo: editedTodo, body: userInput });
   };
 
@@ -38,27 +39,43 @@ export const TodoItemEdit = ({
         outline: "1px solid gray",
         borderRadius: "8px",
         padding: "0rem 0.25rem 0 0",
+        backgroundColor: "#2B2A33",
       }}
     >
       <input
         style={{
           border: "none",
-          outline: "1px solid gray",
-          backgroundColor: "#2B2A33",
           borderRadius: "8px",
           height: "48px",
           paddingLeft: "0.30rem",
           color: "silver",
         }}
-        // onBlur={handleSaveTodo}
         onChange={handleChange}
         value={userInput}
         type="text"
         autoFocus
       />
 
-      <div style={{ alignSelf: "center", minHeight: "40.2px" }}>
-        <button onClick={handleSaveTodo}>Save</button>
+      <div
+        style={{
+          display: "flex",
+          alignSelf: "center",
+          minHeight: "40.2px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            color: "silver",
+            gap: "8px",
+          }}
+        >
+          <CancelOutlined onClick={handleCancelEditTodo} />
+          <button style={{ width: "88.8px" }} onClick={handleSaveTodo}>
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );
