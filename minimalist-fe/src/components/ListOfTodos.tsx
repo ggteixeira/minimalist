@@ -2,7 +2,6 @@ import "../App.css";
 import type { TodoInterface } from "../types/TodoInterface";
 import { useFetchTodos } from "../hooks/useFetchtodos";
 import { useToggleTodo } from "../hooks/useToggleTodo";
-import { EditField } from "./EditField";
 import { TodoItem } from "./TodoItem";
 
 const ListOfTodos = () => {

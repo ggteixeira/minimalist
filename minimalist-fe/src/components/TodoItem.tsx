@@ -2,6 +2,8 @@ import "../App.css";
 import type { TodoInterface } from "../types/TodoInterface";
 import { EditOutlined } from "@mui/icons-material";
 import { useDeleteTodo } from "../hooks/useDeleteTodoById";
+import { useState } from "react";
+import { TodoItemEdit } from "./TodoItemEdit";
 
 export const TodoItem = ({
   todo,
@@ -10,11 +12,29 @@ export const TodoItem = ({
   todo: TodoInterface;
   handleToggleTodo: (todo: TodoInterface) => void;
 }) => {
+  const [isEditingTodo, setIsEditingTodo] = useState(false);
+  const [editedTodo, setEditedTodo] = useState("");
+
   const deleteTodoMutation = useDeleteTodo();
 
   const handleDeleteTodo = (id: number) => {
     deleteTodoMutation.mutate({ todoId: id });
   };
+
+  const handleEditTodo = (todo) => {
+    setIsEditingTodo(true);
+    setEditedTodo(todo);
+  };
+
+  if (isEditingTodo) {
+    return (
+      <TodoItemEdit
+        editedTodo={editedTodo}
+        setEditedTodo={setEditedTodo}
+        setIsEditingTodo={setIsEditingTodo}
+      />
+    );
+  }
 
   return (
     <li
@@ -42,6 +62,7 @@ export const TodoItem = ({
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         {!todo.isCompleted && (
           <EditOutlined
+            onClick={() => handleEditTodo(todo)}
             sx={{ color: "gray", "&:hover": { cursor: "pointer" } }}
           />
         )}
