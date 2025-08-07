@@ -39,7 +39,6 @@ export const TodoItemEdit = ({
         outline: "1px solid gray",
         borderRadius: "8px",
         padding: "0rem 0.25rem 0 0",
-        backgroundColor: "#2B2A33",
       }}
     >
       <input

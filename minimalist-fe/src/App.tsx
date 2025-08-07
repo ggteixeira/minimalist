@@ -13,7 +13,13 @@ export default function App() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "0 auto", padding: "1rem" }}>
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "0 auto",
+        padding: "1rem",
+      }}
+    >
       <h1>Todo List</h1>
       <div style={{ display: "flex", gap: "0.5rem", borderRadius: "8px" }}>
         <input
@@ -26,7 +32,9 @@ export default function App() {
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add new task"
         />
-        <button onClick={handleAddTodo}>Add</button>
+        <button disabled={newTodo.length === 0} onClick={handleAddTodo}>
+          Add
+        </button>
       </div>
       <ListOfTodos />
     </div>
