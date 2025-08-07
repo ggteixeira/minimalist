@@ -9,9 +9,6 @@ export const useEditTodo = () => {
 
   return useMutation({
     mutationFn: ({ todo, body }: { body: string; todo: TodoInterface }) => {
-      console.log("I am the mutation");
-      console.log(todo);
-
       const patchBody = [
         {
           op: "replace",
