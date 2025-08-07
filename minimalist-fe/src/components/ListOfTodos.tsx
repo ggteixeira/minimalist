@@ -10,15 +10,7 @@ const ListOfTodos = () => {
   const toggleTodoMutation = useToggleTodo();
 
   const handleToggleTodo = (todo: TodoInterface) => {
-    const body = [
-      {
-        op: "replace",
-        path: "/iscompleted",
-        value: !todo.isCompleted,
-      },
-    ];
-
-    toggleTodoMutation.mutate({ todo, body });
+    toggleTodoMutation.mutate({ todo });
   };
 
   if (isPending) return <span>Loading...</span>;
