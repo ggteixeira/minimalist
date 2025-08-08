@@ -54,7 +54,7 @@ public class TodoController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult EditTodo(int id)
+    public IActionResult DeleteTodo(int id)
     {
         var todo = _context.Todos.FirstOrDefault(todo => todo.Id == id);
         if (todo == null) return NotFound();
