@@ -1,32 +1,39 @@
-import { useState } from "react";
 import "../App.css";
 import { useEditTodo } from "../hooks/useEditTodo";
 import { CancelOutlined } from "@mui/icons-material";
 import type { TodoInterface } from "../types/TodoInterface";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 export const TodoItemEdit = ({
-  setIsEditingTodo,
   editedTodo,
   handleCancelEditTodo,
 }: {
-  setIsEditingTodo: (_: boolean) => boolean;
   editedTodo: TodoInterface;
   handleCancelEditTodo: () => void;
 }) => {
-  const [userInput, setUserInput] = useState(editedTodo.title);
+  const { register, watch } = useForm({
+    defaultValues: {
+      editValue: editedTodo.title,
+    },
+  });
 
   const editTodoMutation = useEditTodo();
 
-  const handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(value);
+  const handleSaveTodo = (
+    event: React.FormEvent<HTMLFormElement | HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+    editTodoMutation.mutate({
+      todo: editedTodo,
+      body: watch("editValue") || "",
+    });
   };
 
-  const handleSaveTodo = () => {
-    setIsEditingTodo(false);
-    editTodoMutation.mutate({ todo: editedTodo, body: userInput });
-  };
+  useEffect(() => {
+    console.log("editedTodo:");
+    console.log(editedTodo);
+  }, [editedTodo]);
 
   return (
     <li
@@ -41,19 +48,22 @@ export const TodoItemEdit = ({
         padding: "0rem 0.25rem 0 0",
       }}
     >
-      <input
-        style={{
-          border: "none",
-          borderRadius: "8px",
-          height: "48px",
-          paddingLeft: "0.30rem",
-          color: "silver",
-        }}
-        onChange={handleChange}
-        value={userInput}
-        type="text"
-        autoFocus
-      />
+      <form onSubmit={handleSaveTodo}>
+        <input
+          style={{
+            border: "none",
+            borderRadius: "8px",
+            height: "48px",
+            paddingLeft: "0.30rem",
+            color: "gray",
+            fontSize: "16px",
+          }}
+          {...register("editValue")}
+          value={watch("editValue")}
+          type="text"
+          autoFocus
+        />
+      </form>
 
       <div
         style={{
