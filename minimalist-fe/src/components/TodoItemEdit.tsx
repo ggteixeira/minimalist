@@ -29,7 +29,7 @@ export const TodoItemEdit = ({
   };
 
   return (
-    <div
+    <li
       style={{
         display: "flex",
         height: "50px",
@@ -70,12 +70,15 @@ export const TodoItemEdit = ({
             gap: "8px",
           }}
         >
-          <CancelOutlined onClick={handleCancelEditTodo} />
+          <CancelOutlined
+            onClick={handleCancelEditTodo}
+            sx={{ color: "gray", "&:hover": { cursor: "pointer" } }}
+          />
           <button style={{ width: "88.8px" }} onClick={handleSaveTodo}>
             Save
           </button>
         </div>
       </div>
-    </div>
+    </li>
   );
 };
