@@ -21,8 +21,6 @@ export default function App() {
     addTodoMutation.mutate({ body: watch("title") });
   };
 
-  console.log(watch("title"));
-
   return (
     <div
       style={{

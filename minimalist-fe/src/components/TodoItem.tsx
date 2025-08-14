@@ -1,5 +1,5 @@
 import { EditOutlined } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../App.css";
 import { useDeleteTodo } from "../hooks/useDeleteTodoById";
 import type { TodoInterface } from "../types/TodoInterface";
@@ -30,14 +30,10 @@ export const TodoItem = ({
     setIsEditingTodo(false);
   };
 
-  useEffect(() => {
-    console.log("todo:");
-    console.log(todo);
-  }, [todo]);
-
   if (isEditingTodo) {
     return (
       <TodoItemEdit
+        setIsEditingTodo={setIsEditingTodo}
         editedTodo={editedTodo!}
         handleCancelEditTodo={handleCancelEditTodo}
       />

@@ -3,14 +3,15 @@ import { useEditTodo } from "../hooks/useEditTodo";
 import { CancelOutlined } from "@mui/icons-material";
 import type { TodoInterface } from "../types/TodoInterface";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 
 export const TodoItemEdit = ({
   editedTodo,
   handleCancelEditTodo,
+  setIsEditingTodo,
 }: {
   editedTodo: TodoInterface;
   handleCancelEditTodo: () => void;
+  setIsEditingTodo: (state: boolean) => void;
 }) => {
   const { register, watch } = useForm({
     defaultValues: {
@@ -28,12 +29,8 @@ export const TodoItemEdit = ({
       todo: editedTodo,
       body: watch("editValue") || "",
     });
+    setIsEditingTodo(false);
   };
-
-  useEffect(() => {
-    console.log("editedTodo:");
-    console.log(editedTodo);
-  }, [editedTodo]);
 
   return (
     <li
