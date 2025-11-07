@@ -4,6 +4,10 @@ import axios from "axios";
 
 const PATH = "https://localhost:7071/todo";
 
+/**
+ * @deprecated Use `usePatchTodoIdComplete` instead.
+ * This hook will be removed in a future release.
+ */
 export const useToggleTodo = () => {
   const queryClient = useQueryClient();
 
