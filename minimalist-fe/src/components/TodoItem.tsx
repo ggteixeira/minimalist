@@ -1,7 +1,6 @@
 import { EditOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import "../App.css";
-import { useDeleteTodo } from "../hooks/useDeleteTodoById";
 import type { TodoInterface } from "../types/TodoInterface";
 import { TodoItemEdit } from "./TodoItemEdit";
 import {
@@ -53,7 +52,6 @@ export const TodoItem = ({
         justifyContent: "space-between",
         alignItems: "center",
         marginBlock: "0.5rem",
-        // border: "1px solid gray",
         padding: "0.25rem",
         minHeight: "40.2px",
       }}

@@ -38,16 +38,13 @@ const ListOfTodos = () => {
         padding: 0,
       }}
     >
-      {todoData &&
-        todoData.map((todo) => {
-          return (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              handleToggleTodo={handleToggleTodo}
-            />
-          );
-        })}
+      {todoData?.map((todo) => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          handleToggleTodo={handleToggleTodo}
+        />
+      ))}
     </ul>
   );
 };
