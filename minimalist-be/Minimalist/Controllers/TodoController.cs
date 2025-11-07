@@ -8,6 +8,9 @@ using Minimalist.Models;
 
 namespace Minimalist.Controllers;
 
+/// <summary>
+/// Controller that controls Todos.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 public class TodoController : ControllerBase
@@ -15,6 +18,11 @@ public class TodoController : ControllerBase
     private TodoContext _context;
     private IMapper _mapper;
 
+    /// <summary>
+    /// Todo Controller
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mapper"></param>
     public TodoController(TodoContext context, IMapper mapper)
     {
         _context = context;

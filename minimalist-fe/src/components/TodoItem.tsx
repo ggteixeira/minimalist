@@ -4,6 +4,11 @@ import "../App.css";
 import { useDeleteTodo } from "../hooks/useDeleteTodoById";
 import type { TodoInterface } from "../types/TodoInterface";
 import { TodoItemEdit } from "./TodoItemEdit";
+import {
+  invalidateGetTodo,
+  useDeleteTodoId,
+} from "../http/generated/todo/todo";
+import { client } from "../lib/react-query";
 
 export const TodoItem = ({
   todo,
@@ -15,10 +20,11 @@ export const TodoItem = ({
   const [isEditingTodo, setIsEditingTodo] = useState(false);
   const [editedTodo, setEditedTodo] = useState<TodoInterface>();
 
-  const deleteTodoMutation = useDeleteTodo();
+  const deleteTodoMutation = useDeleteTodoId();
 
-  const handleDeleteTodo = (id: number) => {
-    deleteTodoMutation.mutate({ todoId: id });
+  const handleDeleteTodo = async (todoId: number) => {
+    await deleteTodoMutation.mutateAsync({ id: todoId });
+    invalidateGetTodo(client);
   };
 
   const handleEditTodo = (todo: TodoInterface) => {

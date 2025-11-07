@@ -40,7 +40,6 @@ const ListOfTodos = () => {
     >
       {todoData &&
         todoData.map((todo) => {
-          console.log(todo);
           return (
             <TodoItem
               key={todo.id}
