@@ -2,6 +2,8 @@ import "./App.css";
 import ListOfTodos from "./components/ListOfTodos";
 import { useAddTodo } from "./hooks/useAddtodo";
 import { useForm } from "react-hook-form";
+import { invalidateGetTodo, usePostTodo } from "./http/generated/todo/todo";
+import { client } from "./lib/react-query";
 
 export default function App() {
   const {
@@ -14,11 +16,12 @@ export default function App() {
     },
   });
 
-  const addTodoMutation = useAddTodo();
+  const addTodoMutation = usePostTodo();
 
-  const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTodo = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addTodoMutation.mutate({ body: watch("title") });
+    await addTodoMutation.mutateAsync({ data: { title: watch("title") } });
+    invalidateGetTodo(client);
   };
 
   return (
