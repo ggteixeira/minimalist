@@ -47,7 +47,7 @@ export const TodoItem = ({
         justifyContent: "space-between",
         alignItems: "center",
         marginBlock: "0.5rem",
-        border: "1px solid gray",
+        // border: "1px solid gray",
         padding: "0.25rem",
         minHeight: "40.2px",
       }}
@@ -67,7 +67,7 @@ export const TodoItem = ({
         {!todo.isCompleted && (
           <EditOutlined
             onClick={() => handleEditTodo(todo)}
-            sx={{ color: "gray", "&:hover": { cursor: "pointer" } }}
+            sx={{ "&:hover": { cursor: "pointer" } }}
           />
         )}
         <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
