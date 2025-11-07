@@ -442,7 +442,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
-    export type patchTodoIdResponse200 = {
+    /**
+ * @summary Edits a Todo
+ */
+export type patchTodoIdResponse200 = {
   data: void
   status: 200
 }
@@ -507,7 +510,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type PatchTodoIdMutationBody = BodyType<Operation[]>
     export type PatchTodoIdMutationError = unknown
 
-    export const usePatchTodoId = <TError = unknown,
+    /**
+ * @summary Edits a Todo
+ */
+export const usePatchTodoId = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchTodoId>>, TError,{id: number;data: BodyType<Operation[]>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof patchTodoId>>,
