@@ -34,10 +34,8 @@ export interface Operation {
   value?: OperationValue;
 }
 
-export type OperationType = typeof OperationType[keyof typeof OperationType];
+export type OperationType = (typeof OperationType)[keyof typeof OperationType];
 
-
- 
 export const OperationType = {
   NUMBER_0: 0,
   NUMBER_1: 1,
@@ -57,7 +55,6 @@ export interface ReadTodoDto {
 }
 
 export type GetTodoParams = {
-skip?: number;
-take?: number;
+  skip?: number;
+  take?: number;
 };
-

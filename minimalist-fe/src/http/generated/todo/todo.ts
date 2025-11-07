@@ -4,10 +4,7 @@
  * TodosAPI
  * OpenAPI spec version: v1
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -21,587 +18,753 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   CreateTodoDto,
   GetTodoParams,
   Operation,
-  ReadTodoDto
-} from '../api.schemas';
+  ReadTodoDto,
+} from "../api.schemas";
 
-import { apiClientAdapter } from '../../adapters/api-client-adapter';
-import type { BodyType } from '../../adapters/api-client-adapter';
-
+import { apiClientAdapter } from "../../adapters/api-client-adapter";
+import type { BodyType } from "../../adapters/api-client-adapter";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * @summary Adds a new Todo
  */
 export type postTodoResponse201 = {
-  data: void
-  status: 201
-}
-    
-export type postTodoResponseSuccess = (postTodoResponse201) & {
+  data: void;
+  status: 201;
+};
+
+export type postTodoResponseSuccess = postTodoResponse201 & {
   headers: Headers;
 };
-;
-
-export type postTodoResponse = (postTodoResponseSuccess)
+export type postTodoResponse = postTodoResponseSuccess;
 
 export const getPostTodoUrl = () => {
+  return `/Todo`;
+};
 
-
-  
-
-  return `/Todo`
-}
-
-export const postTodo = async (createTodoDto: CreateTodoDto, options?: RequestInit): Promise<postTodoResponse> => {
-  
-  return apiClientAdapter<postTodoResponse>(getPostTodoUrl(),
-  {      
+export const postTodo = async (
+  createTodoDto: CreateTodoDto,
+  options?: RequestInit,
+): Promise<postTodoResponse> => {
+  return apiClientAdapter<postTodoResponse>(getPostTodoUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      createTodoDto,)
-  }
-);}
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json-patch+json",
+      ...options?.headers,
+    },
+    body: JSON.stringify(createTodoDto),
+  });
+};
 
+export const getPostTodoMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postTodo>>,
+    TError,
+    { data: BodyType<CreateTodoDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClientAdapter>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postTodo>>,
+  TError,
+  { data: BodyType<CreateTodoDto> },
+  TContext
+> => {
+  const mutationKey = ["postTodo"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postTodo>>,
+    { data: BodyType<CreateTodoDto> }
+  > = (props) => {
+    const { data } = props ?? {};
 
+    return postTodo(data, requestOptions);
+  };
 
-export const getPostTodoMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTodo>>, TError,{data: BodyType<CreateTodoDto>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
-): UseMutationOptions<Awaited<ReturnType<typeof postTodo>>, TError,{data: BodyType<CreateTodoDto>}, TContext> => {
+  return { mutationFn, ...mutationOptions };
+};
 
-const mutationKey = ['postTodo'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export type PostTodoMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postTodo>>
+>;
+export type PostTodoMutationBody = BodyType<CreateTodoDto>;
+export type PostTodoMutationError = unknown;
 
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postTodo>>, {data: BodyType<CreateTodoDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postTodo(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostTodoMutationResult = NonNullable<Awaited<ReturnType<typeof postTodo>>>
-    export type PostTodoMutationBody = BodyType<CreateTodoDto>
-    export type PostTodoMutationError = unknown
-
-    /**
+/**
  * @summary Adds a new Todo
  */
-export const usePostTodo = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTodo>>, TError,{data: BodyType<CreateTodoDto>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postTodo>>,
-        TError,
-        {data: BodyType<CreateTodoDto>},
-        TContext
-      > => {
+export const usePostTodo = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postTodo>>,
+      TError,
+      { data: BodyType<CreateTodoDto> },
+      TContext
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postTodo>>,
+  TError,
+  { data: BodyType<CreateTodoDto> },
+  TContext
+> => {
+  const mutationOptions = getPostTodoMutationOptions(options);
 
-      const mutationOptions = getPostTodoMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+  return useMutation(mutationOptions, queryClient);
+};
+/**
  * @summary Gets all todos
  */
 export type getTodoResponse200 = {
-  data: ReadTodoDto[]
-  status: 200
-}
-    
-export type getTodoResponseSuccess = (getTodoResponse200) & {
+  data: ReadTodoDto[];
+  status: 200;
+};
+
+export type getTodoResponseSuccess = getTodoResponse200 & {
   headers: Headers;
 };
-;
+export type getTodoResponse = getTodoResponseSuccess;
 
-export type getTodoResponse = (getTodoResponseSuccess)
-
-export const getGetTodoUrl = (params?: GetTodoParams,) => {
+export const getGetTodoUrl = (params?: GetTodoParams) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/Todo?${stringifiedParams}` : `/Todo`
-}
+  return stringifiedParams.length > 0 ? `/Todo?${stringifiedParams}` : `/Todo`;
+};
 
-export const getTodo = async (params?: GetTodoParams, options?: RequestInit): Promise<getTodoResponse> => {
-  
-  return apiClientAdapter<getTodoResponse>(getGetTodoUrl(params),
-  {      
+export const getTodo = async (
+  params?: GetTodoParams,
+  options?: RequestInit,
+): Promise<getTodoResponse> => {
+  return apiClientAdapter<getTodoResponse>(getGetTodoUrl(params), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+    method: "GET",
+  });
+};
 
+export const getGetTodoQueryKey = (params?: GetTodoParams) => {
+  return [`/Todo`, ...(params ? [params] : [])] as const;
+};
 
-
-
-
-export const getGetTodoQueryKey = (params?: GetTodoParams,) => {
-    return [
-    `/Todo`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetTodoQueryOptions = <TData = Awaited<ReturnType<typeof getTodo>>, TError = unknown>(params?: GetTodoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
+export const getGetTodoQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTodo>>,
+  TError = unknown,
+>(
+  params?: GetTodoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTodoQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTodoQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTodo>>> = ({
+    signal,
+  }) => getTodo(params, { signal, ...requestOptions });
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTodo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTodo>>> = ({ signal }) => getTodo(params, { signal, ...requestOptions });
+export type GetTodoQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTodo>>
+>;
+export type GetTodoQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTodoQueryResult = NonNullable<Awaited<ReturnType<typeof getTodo>>>
-export type GetTodoQueryError = unknown
-
-
-export function useGetTodo<TData = Awaited<ReturnType<typeof getTodo>>, TError = unknown>(
- params: undefined |  GetTodoParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>> & Pick<
+export function useGetTodo<
+  TData = Awaited<ReturnType<typeof getTodo>>,
+  TError = unknown,
+>(
+  params: undefined | GetTodoParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTodo>>,
           TError,
           Awaited<ReturnType<typeof getTodo>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTodo<TData = Awaited<ReturnType<typeof getTodo>>, TError = unknown>(
- params?: GetTodoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTodo<
+  TData = Awaited<ReturnType<typeof getTodo>>,
+  TError = unknown,
+>(
+  params?: GetTodoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTodo>>,
           TError,
           Awaited<ReturnType<typeof getTodo>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTodo<TData = Awaited<ReturnType<typeof getTodo>>, TError = unknown>(
- params?: GetTodoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTodo<
+  TData = Awaited<ReturnType<typeof getTodo>>,
+  TError = unknown,
+>(
+  params?: GetTodoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Gets all todos
  */
 
-export function useGetTodo<TData = Awaited<ReturnType<typeof getTodo>>, TError = unknown>(
- params?: GetTodoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTodo<
+  TData = Awaited<ReturnType<typeof getTodo>>,
+  TError = unknown,
+>(
+  params?: GetTodoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodo>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetTodoQueryOptions(params, options);
 
-  const queryOptions = getGetTodoQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
 
 /**
  * @summary Gets all todos
  */
 export const invalidateGetTodo = async (
- queryClient: QueryClient, params?: GetTodoParams, options?: InvalidateOptions
-  ): Promise<QueryClient> => {
-
-  await queryClient.invalidateQueries({ queryKey: getGetTodoQueryKey(params) }, options);
+  queryClient: QueryClient,
+  params?: GetTodoParams,
+  options?: InvalidateOptions,
+): Promise<QueryClient> => {
+  await queryClient.invalidateQueries(
+    { queryKey: getGetTodoQueryKey(params) },
+    options,
+  );
 
   return queryClient;
-}
-
+};
 
 export type getTodoIdResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type getTodoIdResponseSuccess = (getTodoIdResponse200) & {
+  data: void;
+  status: 200;
+};
+
+export type getTodoIdResponseSuccess = getTodoIdResponse200 & {
   headers: Headers;
 };
-;
+export type getTodoIdResponse = getTodoIdResponseSuccess;
 
-export type getTodoIdResponse = (getTodoIdResponseSuccess)
+export const getGetTodoIdUrl = (id: number) => {
+  return `/Todo/${id}`;
+};
 
-export const getGetTodoIdUrl = (id: number,) => {
-
-
-  
-
-  return `/Todo/${id}`
-}
-
-export const getTodoId = async (id: number, options?: RequestInit): Promise<getTodoIdResponse> => {
-  
-  return apiClientAdapter<getTodoIdResponse>(getGetTodoIdUrl(id),
-  {      
+export const getTodoId = async (
+  id: number,
+  options?: RequestInit,
+): Promise<getTodoIdResponse> => {
+  return apiClientAdapter<getTodoIdResponse>(getGetTodoIdUrl(id), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+    method: "GET",
+  });
+};
 
+export const getGetTodoIdQueryKey = (id?: number) => {
+  return [`/Todo/${id}`] as const;
+};
 
-
-
-
-export const getGetTodoIdQueryKey = (id?: number,) => {
-    return [
-    `/Todo/${id}`
-    ] as const;
-    }
-
-    
-export const getGetTodoIdQueryOptions = <TData = Awaited<ReturnType<typeof getTodoId>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
+export const getGetTodoIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTodoId>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTodoIdQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTodoIdQueryKey(id);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTodoId>>> = ({
+    signal,
+  }) => getTodoId(id, { signal, ...requestOptions });
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTodoId>>> = ({ signal }) => getTodoId(id, { signal, ...requestOptions });
+export type GetTodoIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTodoId>>
+>;
+export type GetTodoIdQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTodoIdQueryResult = NonNullable<Awaited<ReturnType<typeof getTodoId>>>
-export type GetTodoIdQueryError = unknown
-
-
-export function useGetTodoId<TData = Awaited<ReturnType<typeof getTodoId>>, TError = unknown>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>> & Pick<
+export function useGetTodoId<
+  TData = Awaited<ReturnType<typeof getTodoId>>,
+  TError = unknown,
+>(
+  id: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTodoId>>,
           TError,
           Awaited<ReturnType<typeof getTodoId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTodoId<TData = Awaited<ReturnType<typeof getTodoId>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTodoId<
+  TData = Awaited<ReturnType<typeof getTodoId>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTodoId>>,
           TError,
           Awaited<ReturnType<typeof getTodoId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTodoId<TData = Awaited<ReturnType<typeof getTodoId>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTodoId<
+  TData = Awaited<ReturnType<typeof getTodoId>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 
-export function useGetTodoId<TData = Awaited<ReturnType<typeof getTodoId>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTodoId<
+  TData = Awaited<ReturnType<typeof getTodoId>>,
+  TError = unknown,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTodoId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetTodoIdQueryOptions(id, options);
 
-  const queryOptions = getGetTodoIdQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
 export const invalidateGetTodoId = async (
- queryClient: QueryClient, id: number, options?: InvalidateOptions
-  ): Promise<QueryClient> => {
-
-  await queryClient.invalidateQueries({ queryKey: getGetTodoIdQueryKey(id) }, options);
+  queryClient: QueryClient,
+  id: number,
+  options?: InvalidateOptions,
+): Promise<QueryClient> => {
+  await queryClient.invalidateQueries(
+    { queryKey: getGetTodoIdQueryKey(id) },
+    options,
+  );
 
   return queryClient;
-}
-
+};
 
 export type deleteTodoIdResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type deleteTodoIdResponseSuccess = (deleteTodoIdResponse200) & {
+  data: void;
+  status: 200;
+};
+
+export type deleteTodoIdResponseSuccess = deleteTodoIdResponse200 & {
   headers: Headers;
 };
-;
+export type deleteTodoIdResponse = deleteTodoIdResponseSuccess;
 
-export type deleteTodoIdResponse = (deleteTodoIdResponseSuccess)
+export const getDeleteTodoIdUrl = (id: number) => {
+  return `/Todo/${id}`;
+};
 
-export const getDeleteTodoIdUrl = (id: number,) => {
-
-
-  
-
-  return `/Todo/${id}`
-}
-
-export const deleteTodoId = async (id: number, options?: RequestInit): Promise<deleteTodoIdResponse> => {
-  
-  return apiClientAdapter<deleteTodoIdResponse>(getDeleteTodoIdUrl(id),
-  {      
+export const deleteTodoId = async (
+  id: number,
+  options?: RequestInit,
+): Promise<deleteTodoIdResponse> => {
+  return apiClientAdapter<deleteTodoIdResponse>(getDeleteTodoIdUrl(id), {
     ...options,
-    method: 'DELETE'
-    
-    
-  }
-);}
+    method: "DELETE",
+  });
+};
 
+export const getDeleteTodoIdMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTodoId>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClientAdapter>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteTodoId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteTodoId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteTodoId>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
 
+    return deleteTodoId(id, requestOptions);
+  };
 
-export const getDeleteTodoIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTodoId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteTodoId>>, TError,{id: number}, TContext> => {
+  return { mutationFn, ...mutationOptions };
+};
 
-const mutationKey = ['deleteTodoId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export type DeleteTodoIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteTodoId>>
+>;
 
-      
+export type DeleteTodoIdMutationError = unknown;
 
+export const useDeleteTodoId = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteTodoId>>,
+      TError,
+      { id: number },
+      TContext
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteTodoId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationOptions = getDeleteTodoIdMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTodoId>>, {id: number}> = (props) => {
-          const {id} = props ?? {};
-
-          return  deleteTodoId(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteTodoIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTodoId>>>
-    
-    export type DeleteTodoIdMutationError = unknown
-
-    export const useDeleteTodoId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTodoId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteTodoId>>,
-        TError,
-        {id: number},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteTodoIdMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+  return useMutation(mutationOptions, queryClient);
+};
+/**
  * @summary Edits a Todo
  */
 export type patchTodoIdResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type patchTodoIdResponseSuccess = (patchTodoIdResponse200) & {
+  data: void;
+  status: 200;
+};
+
+export type patchTodoIdResponseSuccess = patchTodoIdResponse200 & {
   headers: Headers;
 };
-;
+export type patchTodoIdResponse = patchTodoIdResponseSuccess;
 
-export type patchTodoIdResponse = (patchTodoIdResponseSuccess)
+export const getPatchTodoIdUrl = (id: number) => {
+  return `/Todo/${id}`;
+};
 
-export const getPatchTodoIdUrl = (id: number,) => {
-
-
-  
-
-  return `/Todo/${id}`
-}
-
-export const patchTodoId = async (id: number,
-    operation: Operation[], options?: RequestInit): Promise<patchTodoIdResponse> => {
-  
-  return apiClientAdapter<patchTodoIdResponse>(getPatchTodoIdUrl(id),
-  {      
+export const patchTodoId = async (
+  id: number,
+  operation: Operation[],
+  options?: RequestInit,
+): Promise<patchTodoIdResponse> => {
+  return apiClientAdapter<patchTodoIdResponse>(getPatchTodoIdUrl(id), {
     ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      operation,)
-  }
-);}
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json-patch+json",
+      ...options?.headers,
+    },
+    body: JSON.stringify(operation),
+  });
+};
 
+export const getPatchTodoIdMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchTodoId>>,
+    TError,
+    { id: number; data: BodyType<Operation[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClientAdapter>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchTodoId>>,
+  TError,
+  { id: number; data: BodyType<Operation[]> },
+  TContext
+> => {
+  const mutationKey = ["patchTodoId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchTodoId>>,
+    { id: number; data: BodyType<Operation[]> }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
+    return patchTodoId(id, data, requestOptions);
+  };
 
-export const getPatchTodoIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchTodoId>>, TError,{id: number;data: BodyType<Operation[]>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
-): UseMutationOptions<Awaited<ReturnType<typeof patchTodoId>>, TError,{id: number;data: BodyType<Operation[]>}, TContext> => {
+  return { mutationFn, ...mutationOptions };
+};
 
-const mutationKey = ['patchTodoId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export type PatchTodoIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchTodoId>>
+>;
+export type PatchTodoIdMutationBody = BodyType<Operation[]>;
+export type PatchTodoIdMutationError = unknown;
 
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchTodoId>>, {id: number;data: BodyType<Operation[]>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  patchTodoId(id,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PatchTodoIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchTodoId>>>
-    export type PatchTodoIdMutationBody = BodyType<Operation[]>
-    export type PatchTodoIdMutationError = unknown
-
-    /**
+/**
  * @summary Edits a Todo
  */
-export const usePatchTodoId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchTodoId>>, TError,{id: number;data: BodyType<Operation[]>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof patchTodoId>>,
-        TError,
-        {id: number;data: BodyType<Operation[]>},
-        TContext
-      > => {
+export const usePatchTodoId = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchTodoId>>,
+      TError,
+      { id: number; data: BodyType<Operation[]> },
+      TContext
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchTodoId>>,
+  TError,
+  { id: number; data: BodyType<Operation[]> },
+  TContext
+> => {
+  const mutationOptions = getPatchTodoIdMutationOptions(options);
 
-      const mutationOptions = getPatchTodoIdMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export type patchTodoIdCompleteResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type patchTodoIdCompleteResponseSuccess = (patchTodoIdCompleteResponse200) & {
-  headers: Headers;
+  return useMutation(mutationOptions, queryClient);
 };
-;
+export type patchTodoIdCompleteResponse200 = {
+  data: void;
+  status: 200;
+};
 
-export type patchTodoIdCompleteResponse = (patchTodoIdCompleteResponseSuccess)
+export type patchTodoIdCompleteResponseSuccess =
+  patchTodoIdCompleteResponse200 & {
+    headers: Headers;
+  };
+export type patchTodoIdCompleteResponse = patchTodoIdCompleteResponseSuccess;
 
-export const getPatchTodoIdCompleteUrl = (id: number,) => {
+export const getPatchTodoIdCompleteUrl = (id: number) => {
+  return `/Todo/${id}/complete`;
+};
 
+export const patchTodoIdComplete = async (
+  id: number,
+  operation: Operation[],
+  options?: RequestInit,
+): Promise<patchTodoIdCompleteResponse> => {
+  return apiClientAdapter<patchTodoIdCompleteResponse>(
+    getPatchTodoIdCompleteUrl(id),
+    {
+      ...options,
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json-patch+json",
+        ...options?.headers,
+      },
+      body: JSON.stringify(operation),
+    },
+  );
+};
 
-  
+export const getPatchTodoIdCompleteMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchTodoIdComplete>>,
+    TError,
+    { id: number; data: BodyType<Operation[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClientAdapter>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchTodoIdComplete>>,
+  TError,
+  { id: number; data: BodyType<Operation[]> },
+  TContext
+> => {
+  const mutationKey = ["patchTodoIdComplete"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
-  return `/Todo/${id}/complete`
-}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchTodoIdComplete>>,
+    { id: number; data: BodyType<Operation[]> }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-export const patchTodoIdComplete = async (id: number,
-    operation: Operation[], options?: RequestInit): Promise<patchTodoIdCompleteResponse> => {
-  
-  return apiClientAdapter<patchTodoIdCompleteResponse>(getPatchTodoIdCompleteUrl(id),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      operation,)
-  }
-);}
+    return patchTodoIdComplete(id, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PatchTodoIdCompleteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchTodoIdComplete>>
+>;
+export type PatchTodoIdCompleteMutationBody = BodyType<Operation[]>;
+export type PatchTodoIdCompleteMutationError = unknown;
 
+export const usePatchTodoIdComplete = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchTodoIdComplete>>,
+      TError,
+      { id: number; data: BodyType<Operation[]> },
+      TContext
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchTodoIdComplete>>,
+  TError,
+  { id: number; data: BodyType<Operation[]> },
+  TContext
+> => {
+  const mutationOptions = getPatchTodoIdCompleteMutationOptions(options);
 
-export const getPatchTodoIdCompleteMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchTodoIdComplete>>, TError,{id: number;data: BodyType<Operation[]>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
-): UseMutationOptions<Awaited<ReturnType<typeof patchTodoIdComplete>>, TError,{id: number;data: BodyType<Operation[]>}, TContext> => {
-
-const mutationKey = ['patchTodoIdComplete'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchTodoIdComplete>>, {id: number;data: BodyType<Operation[]>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  patchTodoIdComplete(id,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PatchTodoIdCompleteMutationResult = NonNullable<Awaited<ReturnType<typeof patchTodoIdComplete>>>
-    export type PatchTodoIdCompleteMutationBody = BodyType<Operation[]>
-    export type PatchTodoIdCompleteMutationError = unknown
-
-    export const usePatchTodoIdComplete = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchTodoIdComplete>>, TError,{id: number;data: BodyType<Operation[]>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof patchTodoIdComplete>>,
-        TError,
-        {id: number;data: BodyType<Operation[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getPatchTodoIdCompleteMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

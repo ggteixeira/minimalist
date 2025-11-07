@@ -4,103 +4,112 @@
  * TodosAPI
  * OpenAPI spec version: v1
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+  UseMutationResult,
+} from "@tanstack/react-query";
 
-import type {
-  LoginModel
-} from '../api.schemas';
+import type { LoginModel } from "../api.schemas";
 
-import { apiClientAdapter } from '../../adapters/api-client-adapter';
-import type { BodyType } from '../../adapters/api-client-adapter';
-
+import { apiClientAdapter } from "../../adapters/api-client-adapter";
+import type { BodyType } from "../../adapters/api-client-adapter";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-
-
 export type postApiAuthLoginResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type postApiAuthLoginResponseSuccess = (postApiAuthLoginResponse200) & {
+  data: void;
+  status: 200;
+};
+
+export type postApiAuthLoginResponseSuccess = postApiAuthLoginResponse200 & {
   headers: Headers;
 };
-;
-
-export type postApiAuthLoginResponse = (postApiAuthLoginResponseSuccess)
+export type postApiAuthLoginResponse = postApiAuthLoginResponseSuccess;
 
 export const getPostApiAuthLoginUrl = () => {
+  return `/api/Auth/login`;
+};
 
-
-  
-
-  return `/api/Auth/login`
-}
-
-export const postApiAuthLogin = async (loginModel: LoginModel, options?: RequestInit): Promise<postApiAuthLoginResponse> => {
-  
-  return apiClientAdapter<postApiAuthLoginResponse>(getPostApiAuthLoginUrl(),
-  {      
+export const postApiAuthLogin = async (
+  loginModel: LoginModel,
+  options?: RequestInit,
+): Promise<postApiAuthLoginResponse> => {
+  return apiClientAdapter<postApiAuthLoginResponse>(getPostApiAuthLoginUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      loginModel,)
-  }
-);}
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json-patch+json",
+      ...options?.headers,
+    },
+    body: JSON.stringify(loginModel),
+  });
+};
 
+export const getPostApiAuthLoginMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiAuthLogin>>,
+    TError,
+    { data: BodyType<LoginModel> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClientAdapter>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiAuthLogin>>,
+  TError,
+  { data: BodyType<LoginModel> },
+  TContext
+> => {
+  const mutationKey = ["postApiAuthLogin"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiAuthLogin>>,
+    { data: BodyType<LoginModel> }
+  > = (props) => {
+    const { data } = props ?? {};
 
+    return postApiAuthLogin(data, requestOptions);
+  };
 
-export const getPostApiAuthLoginMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data: BodyType<LoginModel>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
-): UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data: BodyType<LoginModel>}, TContext> => {
+  return { mutationFn, ...mutationOptions };
+};
 
-const mutationKey = ['postApiAuthLogin'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export type PostApiAuthLoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiAuthLogin>>
+>;
+export type PostApiAuthLoginMutationBody = BodyType<LoginModel>;
+export type PostApiAuthLoginMutationError = unknown;
 
-      
+export const usePostApiAuthLogin = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiAuthLogin>>,
+      TError,
+      { data: BodyType<LoginModel> },
+      TContext
+    >;
+    request?: SecondParameter<typeof apiClientAdapter>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiAuthLogin>>,
+  TError,
+  { data: BodyType<LoginModel> },
+  TContext
+> => {
+  const mutationOptions = getPostApiAuthLoginMutationOptions(options);
 
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiAuthLogin>>, {data: BodyType<LoginModel>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postApiAuthLogin(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostApiAuthLoginMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAuthLogin>>>
-    export type PostApiAuthLoginMutationBody = BodyType<LoginModel>
-    export type PostApiAuthLoginMutationError = unknown
-
-    export const usePostApiAuthLogin = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data: BodyType<LoginModel>}, TContext>, request?: SecondParameter<typeof apiClientAdapter>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postApiAuthLogin>>,
-        TError,
-        {data: BodyType<LoginModel>},
-        TContext
-      > => {
-
-      const mutationOptions = getPostApiAuthLoginMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};
