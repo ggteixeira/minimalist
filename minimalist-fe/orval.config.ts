@@ -14,12 +14,12 @@ export default defineConfig({
           name: "apiClientAdapter",
         },
         query: {
-          useQuery: true, // TODO: descobre o que isso faz
+          // useQuery: true, // TODO: descobre o que isso faz
           useInvalidate: true,
-          queryOptions: {
-            path: "src/lib/react-query.ts",
-            name: "queryOptionsFn",
-          },
+          // queryOptions: {
+          //   path: "src/lib/react-query.ts",
+          //   name: "queryOptionsFn",
+          // },
         },
       },
     },
@@ -30,7 +30,7 @@ export default defineConfig({
 
     input: {
       target: "./swagger.json",
-      // target: "https://localhost:7071/swagger/v1/swagger.json",
+      // target: "7071/swagger/v1/swagger.json",
     },
   },
 });
