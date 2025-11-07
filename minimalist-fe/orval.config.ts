@@ -3,9 +3,8 @@ import { defineConfig } from "orval";
 export default defineConfig({
   api: {
     output: {
-      // mode: "tags",
+      mode: "tags-split",
       target: "src/http/generated/api.ts",
-      // schemas: "src/todosAPIModel",
       client: "react-query",
       httpClient: "fetch",
       clean: true,
@@ -13,6 +12,14 @@ export default defineConfig({
         mutator: {
           path: "src/http/adapters/api-client-adapter.ts",
           name: "apiClientAdapter",
+        },
+        query: {
+          useQuery: true, // TODO: descobre o que isso faz
+          useInvalidate: true,
+          queryOptions: {
+            path: "src/lib/react-query.ts",
+            name: "queryOptionsFn",
+          },
         },
       },
     },

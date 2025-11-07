@@ -1,16 +1,31 @@
 import "../App.css";
+import {
+  invalidateGetTodo,
+  useGetTodo,
+  usePatchTodoIdComplete,
+} from "../http/generated/todo/todo";
+import { client } from "../lib/react-query";
 import type { TodoInterface } from "../types/TodoInterface";
-import { useFetchTodos } from "../hooks/useFetchtodos";
-import { useToggleTodo } from "../hooks/useToggleTodo";
 import { TodoItem } from "./TodoItem";
 
 const ListOfTodos = () => {
-  const { isPending, error, data: todoData } = useFetchTodos();
+  const { isPending, error, data: todoData } = useGetTodo();
 
-  const toggleTodoMutation = useToggleTodo();
+  const toggleTodoMutation = usePatchTodoIdComplete();
 
-  const handleToggleTodo = (todo: TodoInterface) => {
-    toggleTodoMutation.mutate({ todo });
+  const handleToggleTodo = async ({ id, isCompleted }: TodoInterface) => {
+    await toggleTodoMutation.mutateAsync({
+      id,
+      data: [
+        {
+          op: "replace",
+          path: "/iscompleted",
+          value: !isCompleted,
+        },
+      ],
+    });
+
+    invalidateGetTodo(client);
   };
 
   if (isPending) return <span>Loading...</span>;
@@ -23,15 +38,17 @@ const ListOfTodos = () => {
         padding: 0,
       }}
     >
-      {todoData.map((todo: TodoInterface) => {
-        return (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            handleToggleTodo={handleToggleTodo}
-          />
-        );
-      })}
+      {todoData &&
+        todoData.map((todo) => {
+          console.log(todo);
+          return (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              handleToggleTodo={handleToggleTodo}
+            />
+          );
+        })}
     </ul>
   );
 };
