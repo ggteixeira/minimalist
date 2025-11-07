@@ -70,6 +70,12 @@ public class TodoController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Edits a Todo 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="patch"></param>
+    /// <returns></returns>
     [HttpPatch("{id}")]
     public IActionResult PatchEditTodo(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {
@@ -90,6 +96,12 @@ public class TodoController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Marks as complete
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="patch"></param>
+    /// <returns></returns>
     [HttpPatch("{id}/complete")]
     public IActionResult ToggleCompleted(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {

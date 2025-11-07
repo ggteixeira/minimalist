@@ -185,10 +185,12 @@
         "tags": [
           "Todo"
         ],
+        "summary": "Edits a Todo",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "",
             "required": true,
             "schema": {
               "type": "integer",
@@ -197,6 +199,7 @@
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json-patch+json": {
               "schema": {
