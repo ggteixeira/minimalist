@@ -38,6 +38,12 @@ public class TodoController : ControllerBase
         return CreatedAtAction(nameof(GetTodoById), new { id = todo.Id }, todo);
     }
 
+    /// <summary>
+    /// Gets all todos
+    /// </summary>
+    /// <param name="skip"></param>
+    /// <param name="take"></param>
+    /// <returns></returns>
     [HttpGet]
     public IEnumerable<ReadTodoDto> GetTodos([FromQuery] int skip = 0, [FromQuery] int take = 5)
     {
