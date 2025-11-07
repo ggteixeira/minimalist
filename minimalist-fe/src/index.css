@@ -45,6 +45,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  border-color: lightgray;
 }
 button:hover {
   border-color: gray;
@@ -57,6 +58,21 @@ button:focus-visible {
 input,
 li {
   border-radius: 8px;
+  border: 1px solid;
+  border-color: lightgray;
+  &:hover {
+    border-color: gray;
+    transition: border-color 0.25s;
+  }
+}
+
+svg {
+  color: lightgray;
+}
+
+svg:hover {
+  color: gray;
+  transition: color 0.25s;
 }
 
 @media (prefers-color-scheme: light) {

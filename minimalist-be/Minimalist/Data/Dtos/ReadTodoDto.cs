@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Minimalist.Data.Dtos;
 
 public class ReadTodoDto

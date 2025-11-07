@@ -1,8 +1,9 @@
-import "../App.css";
-import { useEditTodo } from "../hooks/useEditTodo";
 import { CancelOutlined } from "@mui/icons-material";
-import type { TodoInterface } from "../types/TodoInterface";
 import { useForm } from "react-hook-form";
+import "../App.css";
+import { invalidateGetTodo, usePatchTodoId } from "../http/generated/todo/todo";
+import { client } from "../lib/react-query";
+import type { TodoInterface } from "../types/TodoInterface";
 
 export const TodoItemEdit = ({
   editedTodo,
@@ -19,17 +20,24 @@ export const TodoItemEdit = ({
     },
   });
 
-  const editTodoMutation = useEditTodo();
+  const editTodoMutation = usePatchTodoId();
 
-  const handleSaveTodo = (
+  const handleSaveTodo = async (
     event: React.FormEvent<HTMLFormElement | HTMLButtonElement>,
   ) => {
     event.preventDefault();
-    editTodoMutation.mutate({
-      todo: editedTodo,
-      body: watch("editValue") || "",
+    await editTodoMutation.mutateAsync({
+      id: editedTodo.id,
+      data: [
+        {
+          op: "replace",
+          path: "/title",
+          value: watch("editValue") || "",
+        },
+      ],
     });
     setIsEditingTodo(false);
+    invalidateGetTodo(client);
   };
 
   return (

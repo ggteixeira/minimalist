@@ -4,6 +4,10 @@ import type { TodoInterface } from "../types/TodoInterface";
 
 const PATH = "https://localhost:7071/todo";
 
+/**
+ * @deprecated Use `usePatchTodoId` instead.
+ * This hook will be removed in a future release.
+ */
 export const useEditTodo = () => {
   const queryClient = useQueryClient();
 

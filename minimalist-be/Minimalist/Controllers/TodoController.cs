@@ -8,6 +8,9 @@ using Minimalist.Models;
 
 namespace Minimalist.Controllers;
 
+/// <summary>
+/// Controller that controls Todos.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 public class TodoController : ControllerBase
@@ -15,6 +18,11 @@ public class TodoController : ControllerBase
     private TodoContext _context;
     private IMapper _mapper;
 
+    /// <summary>
+    /// Todo Controller
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mapper"></param>
     public TodoController(TodoContext context, IMapper mapper)
     {
         _context = context;
@@ -38,6 +46,12 @@ public class TodoController : ControllerBase
         return CreatedAtAction(nameof(GetTodoById), new { id = todo.Id }, todo);
     }
 
+    /// <summary>
+    /// Gets all todos
+    /// </summary>
+    /// <param name="skip"></param>
+    /// <param name="take"></param>
+    /// <returns></returns>
     [HttpGet]
     public IEnumerable<ReadTodoDto> GetTodos([FromQuery] int skip = 0, [FromQuery] int take = 5)
     {
@@ -64,6 +78,12 @@ public class TodoController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Edits a Todo 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="patch"></param>
+    /// <returns></returns>
     [HttpPatch("{id}")]
     public IActionResult PatchEditTodo(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {
@@ -84,6 +104,12 @@ public class TodoController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Marks as complete
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="patch"></param>
+    /// <returns></returns>
     [HttpPatch("{id}/complete")]
     public IActionResult ToggleCompleted(int id, JsonPatchDocument<UpdateTodoDto> patch)
     {

@@ -3,6 +3,11 @@ import axios from "axios";
 
 const PATH = "https://localhost:7071/todo";
 
+/**
+ * @deprecated Use `usePostTodo` instead.
+ * This hook will be removed in a future release.
+ */
+
 export const useAddTodo = () => {
   const queryClient = useQueryClient();
 
