@@ -8,6 +8,7 @@ export default function App() {
   const {
     register,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -21,6 +22,7 @@ export default function App() {
     event.preventDefault();
     await addTodoMutation.mutateAsync({ data: { title: watch("title") } });
     invalidateGetTodo(client);
+    setValue("title", "");
   };
 
   return (
