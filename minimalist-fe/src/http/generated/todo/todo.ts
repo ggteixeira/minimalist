@@ -669,6 +669,9 @@ export const usePatchTodoId = <TError = unknown, TContext = unknown>(
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * @summary Marks as complete
+ */
 export type patchTodoIdCompleteResponse200 = {
   data: void;
   status: 200;
@@ -747,6 +750,9 @@ export type PatchTodoIdCompleteMutationResult = NonNullable<
 export type PatchTodoIdCompleteMutationBody = BodyType<Operation[]>;
 export type PatchTodoIdCompleteMutationError = unknown;
 
+/**
+ * @summary Marks as complete
+ */
 export const usePatchTodoIdComplete = <TError = unknown, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<

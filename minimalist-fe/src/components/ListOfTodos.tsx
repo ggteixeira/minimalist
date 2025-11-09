@@ -38,7 +38,7 @@ const ListOfTodos = () => {
         padding: 0,
       }}
     >
-      {todoData?.map((todo) => (
+      {todoData && todoData?.map((todo) => (
         <TodoItem
           key={todo.id}
           todo={todo}

@@ -47,8 +47,8 @@ export const OperationType = {
 } as const;
 
 export interface ReadTodoDto {
-  /** @minLength 1 */
-  id: string;
+  /** @nullable */
+  id?: string | null;
   /** @nullable */
   title?: string | null;
   isCompleted?: boolean;
