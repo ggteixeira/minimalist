@@ -247,10 +247,12 @@
         "tags": [
           "Todo"
         ],
+        "summary": "Marks as complete",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "",
             "required": true,
             "schema": {
               "type": "integer",
@@ -259,6 +261,7 @@
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json-patch+json": {
               "schema": {
@@ -372,14 +375,11 @@
         "format": "int32"
       },
       "ReadTodoDto": {
-        "required": [
-          "id"
-        ],
         "type": "object",
         "properties": {
           "id": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
             "type": "string",
